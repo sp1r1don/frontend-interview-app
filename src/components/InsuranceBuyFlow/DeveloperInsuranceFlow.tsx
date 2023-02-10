@@ -2,11 +2,7 @@ import React from 'react'
 import AgeStep from 'src/components/InsuranceBuyFlow/AgeStep'
 import EmailStep from 'src/components/InsuranceBuyFlow/EmailStep'
 import SummaryStep from 'src/components/InsuranceBuyFlow/SummaryStep'
-import {
-  ProductCollectedData,
-  ProductFlowsSteps,
-  ProductIds,
-} from 'src/types/product'
+import { ProductCollectedData, ProductFlowsSteps, ProductIds } from 'src/types/product'
 
 interface DeveloperInsuranceFlowProps {
   onChangeStep: (
@@ -25,9 +21,7 @@ export const DeveloperInsuranceFlow: React.FC<DeveloperInsuranceFlowProps> = ({
     <>
       {currentStep === 'email' && <EmailStep cb={onChangeStep('age')} />}
       {currentStep === 'age' && <AgeStep cb={onChangeStep('summary')} />}
-      {currentStep === 'summary' && (
-        <SummaryStep collectedData={collectedData} />
-      )}
+      {currentStep === 'summary' && <SummaryStep collectedData={collectedData} />}
     </>
   )
 }

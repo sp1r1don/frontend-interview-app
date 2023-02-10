@@ -13,9 +13,7 @@ const FORM_DATA = {
 
 const FORM_DATA_ERRORS = () => {
   const obj: Partial<Record<keyof typeof FORM_DATA, boolean>> = {}
-  Object.keys(FORM_DATA).forEach(
-    (el: keyof typeof FORM_DATA) => (obj[el] = false)
-  )
+  Object.keys(FORM_DATA).forEach((el: keyof typeof FORM_DATA) => (obj[el] = false))
   return obj
 }
 
@@ -24,8 +22,7 @@ export const FirstLastNameStep: React.FC<FirstLastNameStepProps> = (props) => {
   const [errors, setErrors] = useState(FORM_DATA_ERRORS)
 
   const changeInputHandler =
-    (dataKey: keyof typeof FORM_DATA) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (dataKey: keyof typeof FORM_DATA) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
 
       setErrors((curr) => ({

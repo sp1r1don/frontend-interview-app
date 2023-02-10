@@ -8,27 +8,20 @@ import {
   PRODUCT_FLOWS_STEPS,
   PRODUCT_IDS_TO_NAMES,
 } from 'src/consts/product'
-import {
-  ProductCollectedData,
-  ProductFlowsSteps,
-  ProductIds,
-} from 'src/types/product'
+import { ProductCollectedData, ProductFlowsSteps, ProductIds } from 'src/types/product'
 
 export const ProductID: React.FC = () => {
   const { productID } = useParams<{ productID: ProductIds }>() as unknown as {
     productID: ProductIds
   }
 
-  const [currentStep, setStep] = useState<
-    ProductFlowsSteps[ProductIds][number]
-  >(PRODUCT_FLOWS_STEPS[productID][0])
-  const [collectedData, updateData] = useState(
-    PRODUCT_COLLECTED_DATA[productID]
+  const [currentStep, setStep] = useState<ProductFlowsSteps[ProductIds][number]>(
+    PRODUCT_FLOWS_STEPS[productID][0]
   )
+  const [collectedData, updateData] = useState(PRODUCT_COLLECTED_DATA[productID])
 
   const getStepCallback =
-    (nextStep: ProductFlowsSteps[ProductIds][number]) =>
-    (field: string, value: any) => {
+    (nextStep: ProductFlowsSteps[ProductIds][number]) => (field: string, value: any) => {
       updateData({ ...collectedData, [field]: value })
       setStep(nextStep)
     }
@@ -53,18 +46,14 @@ export const ProductID: React.FC = () => {
             <DeveloperInsuranceFlow
               currentStep={currentStep}
               onChangeStep={getStepCallback}
-              collectedData={
-                collectedData as ProductCollectedData[ProductIds.devIns]
-              }
+              collectedData={collectedData as ProductCollectedData[ProductIds.devIns]}
             />
           )}
           {productID === ProductIds.designerIns && (
             <DesignerInsuranceFlow
               currentStep={currentStep}
               onChangeStep={getStepCallback}
-              collectedData={
-                collectedData as ProductCollectedData[ProductIds.designerIns]
-              }
+              collectedData={collectedData as ProductCollectedData[ProductIds.designerIns]}
             />
           )}
         </>

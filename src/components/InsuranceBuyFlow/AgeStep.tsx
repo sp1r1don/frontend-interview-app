@@ -4,25 +4,45 @@ interface AgeStepProps {
   cb: (field: string, value: number) => void
 }
 
+const IS_NUMERIC = /^-?\d+$/
+
 const AgeStep: React.FC<AgeStepProps> = (props) => {
   const [age, setAge] = useState(0)
+  const [error, setError] = useState(false)
 
   function ageInputHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
+
+    if (!IS_NUMERIC.test(value) || Number(value) === 0) setError(true)
+    else setError(false)
+
     setAge(Number(value))
   }
 
-  function submitEventHandler() {
+  function submitEventHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    if (error || Number(age) === 0) {
+      setError(true)
+      return
+    }
+
     props.cb('age', age)
   }
 
   return (
-    <>
+    <form onSubmit={submitEventHandler}>
       <div>
-        Age: <input type="number" onChange={ageInputHandler} value={age} />
+        Age:{' '}
+        <input
+          className={error ? 'error' : ''}
+          type="number"
+          onChange={ageInputHandler}
+          value={age}
+        />
       </div>
-      <button onClick={submitEventHandler}>Next</button>
-    </>
+      <button type="submit">Next</button>
+    </form>
   )
 }
 

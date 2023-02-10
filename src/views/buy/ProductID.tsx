@@ -1,38 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { DesignerInsuranceFlow } from 'src/components/InsuranceBuyFlow/DesignerInsuranceFlow'
 import { DeveloperInsuranceFlow } from 'src/components/InsuranceBuyFlow/DeveloperInsuranceFlow'
 import SummaryStep from 'src/components/InsuranceBuyFlow/SummaryStep'
-import { ProductFlowsSteps, ProductIds } from 'src/types/product'
-
-const PRODUCT_IDS_TO_NAMES = {
-  [ProductIds.devIns]: 'Developer Insurance',
-  [ProductIds.designerIns]: 'Designer Insurance',
-}
-
-const PRODUCT_COLLECTED_DATA = {
-  [ProductIds.devIns]: {
-    email: '',
-    age: 0,
-  },
-  [ProductIds.designerIns]: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    age: 0,
-  },
-}
-
-const PRODUCT_FLOWS_STEPS = {
-  [ProductIds.devIns]: ['email', 'age'] as const,
-  [ProductIds.designerIns]: ['email', 'age', 'firstLastName'] as const,
-}
+import {
+  PRODUCT_COLLECTED_DATA,
+  PRODUCT_FLOWS_STEPS,
+  PRODUCT_IDS_TO_NAMES,
+} from 'src/consts/product'
+import {
+  ProductCollectedData,
+  ProductFlowsSteps,
+  ProductIds,
+} from 'src/types/product'
 
 export const ProductID: React.FC = () => {
   const { productID } = useParams<{ productID: ProductIds }>() as unknown as {
     productID: ProductIds
   }
-
-  console.log('productID', productID)
 
   const [currentStep, setStep] = useState<
     ProductFlowsSteps[ProductIds][number]
@@ -48,6 +33,13 @@ export const ProductID: React.FC = () => {
       setStep(nextStep)
     }
 
+  useEffect(() => {
+    if (!productID) return
+
+    setStep(PRODUCT_FLOWS_STEPS[productID][0])
+    updateData(PRODUCT_COLLECTED_DATA[productID])
+  }, [productID])
+
   if (!productID) return null
 
   return (
@@ -57,10 +49,24 @@ export const ProductID: React.FC = () => {
         <SummaryStep collectedData={collectedData} />
       ) : (
         <>
-          <DeveloperInsuranceFlow
-            currentStep={currentStep}
-            onChangeStep={getStepCallback}
-          />
+          {productID === ProductIds.devIns && (
+            <DeveloperInsuranceFlow
+              currentStep={currentStep}
+              onChangeStep={getStepCallback}
+              collectedData={
+                collectedData as ProductCollectedData[ProductIds.devIns]
+              }
+            />
+          )}
+          {productID === ProductIds.designerIns && (
+            <DesignerInsuranceFlow
+              currentStep={currentStep}
+              onChangeStep={getStepCallback}
+              collectedData={
+                collectedData as ProductCollectedData[ProductIds.designerIns]
+              }
+            />
+          )}
         </>
       )}
     </>
